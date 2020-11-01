@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AntDesign.Pro.Layout;
+using AirportSubscribe.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AirportSubscribe
 {
@@ -30,11 +32,16 @@ namespace AirportSubscribe
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddAntDesign();
-			services.AddScoped(sp => new HttpClient
+            services.AddScoped(sp => new HttpClient
             {
                 BaseAddress = new Uri(sp.GetService<NavigationManager>().BaseUri)
             });
             services.Configure<ProSettings>(Configuration.GetSection("ProSettings"));
+
+            var connectionString = Configuration.GetConnectionString("MysqlConnection");
+
+            services.AddDbContext<AirportContext>(options => options.UseMySql(connectionString));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
