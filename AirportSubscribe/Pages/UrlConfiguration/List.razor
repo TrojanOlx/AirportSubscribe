@@ -13,42 +13,56 @@
         </Breadcrumb>
         <ChildContent>
             <div class="standardList">
-                @*<Card>
-                        <Row Gutter="24">
-                            <AntDesign.Col Sm="8" Xs="24">
-                                @Info("我的待办", "8个任务", true)
-                            </AntDesign.Col>
-                            <AntDesign.Col Sm="8" Xs="24">
-                                @Info("本周任务平均处理时间", "32分钟", true)
-                            </AntDesign.Col>
-                            <AntDesign.Col Sm="8" Xs="24">
-                                @Info("本周完成任务数", "24个任务")
-                            </AntDesign.Col>
-                        </Row>
-                    </Card>*@
-
                 <Card Class="listCard"
                       Title="基本列表"
                       Style="margin-top: 24px;"
                       BodyStyle="padding: 0 32px 40px 32px">
-                    @*<Extra>
-                            <div class="extraContent">
-                                <RadioGroup @bind-Value="_model.Status">
-                                    <Radio RadioButton Value="@("all")">全部</Radio>
-                                    <Radio RadioButton Value="@("progress")">进行中</Radio>
-                                    <Radio RadioButton Value="@("waiting")">等待中</Radio>
-                                </RadioGroup>
-                                <Search Class="extraContentSearch" Placeholder="请输入" @bind-Value="_model.SearchKeyword" />
-                            </div>
-                        </Extra>*@
                     <ChildContent>
-                        <Button Type="dashed"
-                                Style="width: 100%; margin-bottom: 8px;"
-                                OnClick="ShowModal">
-                            <Icon Type="plus" Theme="outline" />
-                            添加
-                        </Button>
+                        @if (!isShowAdd)
+                        {
+                            <Button Type="dashed"
+                                    Style="width: 100%; margin-bottom: 8px;"
+                                    OnClick="ShowModal">
+                                <Icon Type="plus" Theme="outline" />
+                                添加
+                            </Button>
+                        }
+                        else
+                        {
+                            <div style="border:1px solid #ebedf0;padding:25px">
+                                <Form Layout="@FormLayout.Vertical"
+                                      Model="@aipportUrlCommand"
+                                      OnFinish="OnFinish"
+                                      OnFinishFailed="OnFinishFailed">
+                                    <FormItem>
+                                        <div>
+                                            <RadioGroup @bind-Value="@aipportUrlCommand.UrlType" ButtonStyle="solid">
+                                                @foreach (var item in Enum.GetValues(typeof(UrlTypeEnum)).Cast<UrlTypeEnum>())
+                                                {
+                                                    <Radio RadioButton Value="@(item)">@item.ToString()</Radio>
+                                                }
+                                            </RadioGroup>
+                                        </div>
+                                    </FormItem>
+                                    <FormItem Label="名称">
+                                        <Input @bind-Value="@aipportUrlCommand.UrlName" />
+                                    </FormItem>
 
+                                    <FormItem Label="Url">
+                                        <Input @bind-Value="@aipportUrlCommand.UrlString" />
+                                    </FormItem>
+
+                                    <FormItem Style="text-align: right;">
+                                        <Button Type="@ButtonType.Primary" HtmlType="submit">
+                                            Submit
+                                        </Button>
+                                        <Button OnClick="CloseModel">
+                                            Close
+                                        </Button>
+                                    </FormItem>
+                                </Form>
+                            </div>
+                        }
                         <AntList TItem="ListItemDataType"
                                  DataSource="_data"
                                  ItemLayout="ListItemLayout.Horizontal">
@@ -83,24 +97,39 @@
     </PageContainer>
 </div>
 
+
+
 @code
 {
+
+    private bool isShowAdd = false;
+
+    void ShowModal()
+    {
+        isShowAdd = true;
+    }
+
+    void CloseModel()
+    {
+        isShowAdd = false;
+    }
+
     private static readonly RenderFragment Edit =@<a key="edit">编辑</a>;
+private static readonly RenderFragment Delete =@<a key="edit">删除</a>;
 
 private readonly RenderFragment[] _actions =
 {
-        Edit
-};
+                    Edit,
+                    Delete
+    };
 
-    private RenderFragment Info(string title, string value, bool bordered = false)
-    {
-         return @<div class="headerInfo">
-            <span>@title</span>
-            <p>@value</p>
-            @if (bordered)
-            {
-                <em />
-            }
-        </div>;
-    }
+private RenderFragment Info(string title, string value, bool bordered = false)
+{
+return @<div class="headerInfo">
+    <span>@title</span>
+    <p>@value</p>
+    @if (bordered)
+    {<em />}
+</div>;
+}
 }

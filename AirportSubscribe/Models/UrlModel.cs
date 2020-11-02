@@ -19,7 +19,9 @@ namespace AirportSubscribe.Models
     }
     public enum UrlTypeEnum
     {
-        SSR = 1,
-        V2ray = 2
+
+        V2ray = 1,
+        SSR = 2,
+        SS = 3
     }
 }

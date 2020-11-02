@@ -15,7 +15,7 @@ namespace AirportSubscribe.Servers.Urls
         {
             public string UrlName { get; set; }
             public string UrlString { get; set; }
-            public UrlTypeEnum UrlType { get; set; }
+            public UrlTypeEnum UrlType { get; set; } = UrlTypeEnum.V2ray;
         }
 
         public class Handler : IRequestHandler<AddAipportUrlCommand, bool>
@@ -29,15 +29,24 @@ namespace AirportSubscribe.Servers.Urls
                 _mapper = mapper;
             }
 
-            public async Task<bool> Handle(AddAipportUrlCommand request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(AddAipportUrlCommand message, CancellationToken cancellationToken)
             {
-                var urlModel = _mapper.Map<UrlModel>(request);
+                var urlModel = _mapper.Map<UrlModel>(message);
                 urlModel = (await _context.UrlModels.AddAsync(urlModel)).Entity;
-                if (await _context.SaveChangesAsync() > 0)
+                try
                 {
-                    return true;
+                    if (await _context.SaveChangesAsync() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw;
+                }
+                
             }
         }
 

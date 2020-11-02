@@ -22,6 +22,9 @@ namespace AirportSubscribe.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("UrlName")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("UrlString")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 

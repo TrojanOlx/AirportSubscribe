@@ -3,15 +3,16 @@
 
 @if (IsLogin)
 {
-    <AntDesign.Pro.Layout.BasicLayout 
-        Logo="@("https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg")"
-        MenuData="_menuData">
+    <AntDesign.Pro.Layout.BasicLayout Logo="@("https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg")"
+                                      MenuData="_menuData">
         <RightContentRender>
             <RightContent />
         </RightContentRender>
+
         <ChildContent>
             @Body
         </ChildContent>
+
     </AntDesign.Pro.Layout.BasicLayout>
     <SettingDrawer />
 }

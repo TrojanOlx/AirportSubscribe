@@ -9,8 +9,10 @@
 		<PackageReference Include="AntDesign.Charts" Version="0.2.0-*" />
 		<PackageReference Include="AntDesign.Pro.Layout" Version="0.1.0-*" />
 		<PackageReference Include="AutoMapper" Version="10.1.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
 		<PackageReference Include="LiveSharp" Version="1.6.12" />
 		<PackageReference Include="MediatR" Version="9.0.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">
 			<PrivateAssets>all</PrivateAssets>
@@ -38,7 +40,8 @@
 	</Target>
 
 	<Target Name="DebugRunGulp" BeforeTargets="DebugEnsureNodeEnv" Condition=" '$(Configuration)' == 'Debug' And Exists('$(SolutionDir)node_modules') ">
-		<Exec WorkingDirectory="$(SolutionDir)" Command="npm run gulp:pro" />
+		<Exec WorkingDirectory="$(SolutionDir)" Command="npm install" />
+		<!--<Exec WorkingDirectory="$(SolutionDir)" Command="npm run gulp:pro" />-->
 	</Target>
 
 	<Target Name="PublishRunGulp" AfterTargets="ComputeFilesToPublish">
