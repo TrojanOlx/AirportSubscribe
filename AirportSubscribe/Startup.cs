@@ -46,7 +46,10 @@ namespace AirportSubscribe
 
             var connectionString = Configuration.GetConnectionString("MysqlConnection");
 
-            services.AddDbContext<AirportContext>(options => options.UseMySql(connectionString));
+            services.AddDbContext<AirportContext>(options => options.UseMySql(connectionString, builder =>
+            {
+                builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+            }));
 
         }
 

@@ -1,6 +1,9 @@
 ﻿@page "/UrlConfiguration/List"
 
 @using AirportSubscribe.Models
+@using AirportSubscribe.Models.UrlModels
+@using AirportSubscribe.Models.UrlModels.Dto
+
 
 <div>
     <PageContainer Title="Basic List">
@@ -63,27 +66,27 @@
                                 </Form>
                             </div>
                         }
-                        <AntList TItem="ListItemDataType"
+                        <AntList TItem="UrlModelOutDto"
                                  DataSource="_data"
                                  ItemLayout="ListItemLayout.Horizontal">
                             <ListItem Actions="_actions">
-                                <ListItemMeta Avatar="@context.Avatar" Description="@context.SubDescription">
+                                <ListItemMeta Avatar="@context.IconUrl" Description="@context.UrlString">
                                     <TitleTemplate>
-                                        <a href="@context.Href">@context.Title</a>
+                                        <a href="@context.IconUrl">@context.UrlName</a>
                                     </TitleTemplate>
                                 </ListItemMeta>
                                 <div class="listContent">
                                     <div class="listContentItem">
                                         <span>Owner</span>
-                                        <p>@context.Owner</p>
+                                        <p>@context.CreateUser</p>
                                     </div>
                                     <div class="listContentItem">
                                         <span>开始时间</span>
-                                        <p>@context.CreatedAt.ToString("yyyy-MM-dd HH:mm")</p>
+                                        <p>@context.CreateTime.ToString("yyyy-MM-dd HH:mm")</p>
                                     </div>
                                     <div class="listContentItem">
-                                        <AntDesign.Progress Percent="@context.Percent"
-                                                            Status="@_pStatus[context.Status]"
+                                        <AntDesign.Progress Percent="@GetSpeedPercent(context.Speed)"
+                                                            Status="@GetSpeedStatus(context.Speed)"
                                                             StrokeWidth="6"
                                                             Style="width: 180px;" />
                                     </div>

@@ -1,4 +1,5 @@
 ﻿using AirportSubscribe.Models;
+using AirportSubscribe.Models.UrlModels;
 using AutoMapper;
 using MediatR;
 using System;

@@ -1,4 +1,6 @@
 ﻿using AirportSubscribe.Models;
+using AirportSubscribe.Models.UrlModels;
+using AirportSubscribe.Models.UrlModels.Dto;
 using AntDesign;
 using MediatR;
 using Microsoft.AspNetCore.Components;
@@ -16,7 +18,7 @@ namespace AirportSubscribe.Pages.UrlConfiguration
     {
 
         [Inject]
-        private  IMediator _mediator { get; set; }
+        private IMediator _mediator { get; set; }
 
 
         private readonly BasicListFormModel _model = new BasicListFormModel();
@@ -29,16 +31,29 @@ namespace AirportSubscribe.Pages.UrlConfiguration
             {"success", ProgressStatus.Success}
         };
 
-        private ListItemDataType[] _data = { };
+        //private ListItemDataType[] _data = { };
 
 
         private AddAipportUrlCommand aipportUrlCommand = new AddAipportUrlCommand();
 
-        
-        public List()
-        {
 
-        }
+        private static ProgressStatus GetSpeedStatus(decimal speed) => speed switch
+        {
+            _ when speed >= 0 && speed < 100 => ProgressStatus.Exception,
+            _ when speed >= 100 && speed < 1000 => ProgressStatus.Active,
+            _ when speed >= 1000 && speed < 3000 => ProgressStatus.Normal,
+            _ when speed > 3000 => ProgressStatus.Success,
+            _ => ProgressStatus.Exception
+        };
+
+        private static int GetSpeedPercent(decimal speed) => speed > 3000 ? 100 : (int)(speed / 3000 * 100);
+
+
+
+
+
+
+        private List<UrlModelOutDto> _data = new List<UrlModelOutDto>();
 
         private async Task OnFinish(EditContext editContext)
         {
@@ -57,7 +72,10 @@ namespace AirportSubscribe.Pages.UrlConfiguration
             await base.OnInitializedAsync();
             var str = File.ReadAllText("./wwwroot/data/fake_list.json");
             var list = JsonConvert.DeserializeObject<List<ListItemDataType>>(str);
-            _data = list.ToArray();
+            //_data = list.ToArray();
+            _data = new List<UrlModelOutDto>()
+            {
+            };
 
         }
 
