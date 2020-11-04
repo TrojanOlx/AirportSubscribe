@@ -33,7 +33,8 @@
                         else
                         {
                             <div style="border:1px solid #ebedf0;padding:25px">
-                                <Form Layout="@FormLayout.Vertical"
+                                <Form @ref="form"
+                                      Layout="@FormLayout.Vertical"
                                       Model="@aipportUrlCommand"
                                       OnFinish="OnFinish"
                                       OnFinishFailed="OnFinishFailed">
@@ -67,9 +68,9 @@
                             </div>
                         }
                         <AntList TItem="UrlModelOutDto"
-                                 DataSource="_data"
+                                 DataSource="_model"
                                  ItemLayout="ListItemLayout.Horizontal">
-                            <ListItem Actions="_actions">
+                            <ListItem Actions="GetRenderFragments(context)">
                                 <ListItemMeta Avatar="@context.IconUrl" Description="@context.UrlString">
                                     <TitleTemplate>
                                         <a href="@context.IconUrl">@context.UrlName</a>
@@ -93,6 +94,9 @@
                                 </div>
                             </ListItem>
                         </AntList>
+                        @*<div style="float:right">
+                                <Pagination PageIndex="_model.PageIndex" PageSize="_model.PageSize" Total="_model.Total"></Pagination>
+                            </div>*@
                     </ChildContent>
                 </Card>
             </div>
@@ -102,36 +106,42 @@
 
 
 
+
 @code
 {
-
     private bool isShowAdd = false;
 
     void ShowModal()
     {
         isShowAdd = true;
+        form.Reset();
     }
 
     void CloseModel()
     {
         isShowAdd = false;
+        form.Reset();
     }
 
-    private static readonly RenderFragment Edit =@<a key="edit">编辑</a>;
-private static readonly RenderFragment Delete =@<a key="edit">删除</a>;
 
-private readonly RenderFragment[] _actions =
+    public RenderFragment[] GetRenderFragments(UrlModelOutDto item)
+    {
+        RenderFragment Edit =@<Button Type="link" OnClick="(async() =>await OnEdit(item))">编辑</Button>;
+        RenderFragment Delete =@<Button Type="link" OnClick="(async () =>await OnDelete(item))">删除</Button>;
+
+        return new RenderFragment[] { Edit, Delete };
+    }
+
+private void Cw(UrlModelOutDto item)
 {
-                    Edit,
-                    Delete
-    };
+Console.WriteLine(item.Id);
+}
+
 
 private RenderFragment Info(string title, string value, bool bordered = false)
 {
 return @<div class="headerInfo">
-    <span>@title</span>
-    <p>@value</p>
-    @if (bordered)
+    <span>@title</span><p>@value</p>@if (bordered)
     {<em />}
 </div>;
 }

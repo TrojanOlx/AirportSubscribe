@@ -17,8 +17,8 @@ namespace AirportSubscribe.Servers.Urls
     {
         public class GetAirportUrlListQuery : IRequest<PageListOutDto<UrlModelOutDto>>
         {
-            public int PageIndex { get; set; }
-            public int PageSize { get; set; }
+            public int PageIndex { get; set; } = 1;
+            public int PageSize { get; set; } = 10;
             public string Key { get; set; }
         }
 
@@ -50,7 +50,7 @@ namespace AirportSubscribe.Servers.Urls
                             {
                                 Id = s.Id,
                                 UrlName = s.UrlName,
-                                UrlString = s.UrlString,
+                                UrlString = s.UrlString.Length > 16 ? s.UrlString.Substring(0, 16) + "..." : s.UrlString,
                                 UrlType = s.UrlType,
                                 IconUrl = GetIconUrl(s.UrlType),
                                 Speed = ran.Next(0, 5000),

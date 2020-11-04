@@ -33,6 +33,12 @@ namespace AirportSubscribe.Servers.Urls
             public async Task<bool> Handle(AddAipportUrlCommand message, CancellationToken cancellationToken)
             {
                 var urlModel = _mapper.Map<UrlModel>(message);
+                urlModel.CreateTime = DateTimeOffset.Now;
+                urlModel.CreateUser = "Trojan";
+                urlModel.LastUpdateUser = "Trojan";
+                urlModel.LastUpdateTime = DateTimeOffset.Now;
+
+
                 urlModel = (await _context.UrlModels.AddAsync(urlModel)).Entity;
                 try
                 {

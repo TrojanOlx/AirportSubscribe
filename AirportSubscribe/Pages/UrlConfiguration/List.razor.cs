@@ -1,6 +1,8 @@
 ﻿using AirportSubscribe.Models;
+using AirportSubscribe.Models.Dto;
 using AirportSubscribe.Models.UrlModels;
 using AirportSubscribe.Models.UrlModels.Dto;
+using AirportSubscribe.Servers.Urls;
 using AntDesign;
 using MediatR;
 using Microsoft.AspNetCore.Components;
@@ -20,8 +22,11 @@ namespace AirportSubscribe.Pages.UrlConfiguration
         [Inject]
         private IMediator _mediator { get; set; }
 
+        [Inject]
+        MessageService _message { get; set; }
 
-        private readonly BasicListFormModel _model = new BasicListFormModel();
+        private Form<AddAipportUrlCommand> form = new Form<AddAipportUrlCommand>();
+
 
         private readonly IDictionary<string, ProgressStatus> _pStatus = new Dictionary<string, ProgressStatus>
         {
@@ -48,17 +53,16 @@ namespace AirportSubscribe.Pages.UrlConfiguration
 
         private static int GetSpeedPercent(decimal speed) => speed > 3000 ? 100 : (int)(speed / 3000 * 100);
 
-
-
-
-
-
-        private List<UrlModelOutDto> _data = new List<UrlModelOutDto>();
+        private PageListOutDto<UrlModelOutDto> _model = new PageListOutDto<UrlModelOutDto>();
 
         private async Task OnFinish(EditContext editContext)
         {
-            await _mediator.Send(aipportUrlCommand);
-            Console.WriteLine($"Success:{JsonConvert.SerializeObject(aipportUrlCommand)}");
+            if (await _mediator.Send(aipportUrlCommand))
+            {
+                _model = await _mediator.Send(new GetAirportUrlList.GetAirportUrlListQuery());
+                isShowAdd = false;
+                form.Reset();
+            }
         }
 
         private void OnFinishFailed(EditContext editContext)
@@ -67,17 +71,37 @@ namespace AirportSubscribe.Pages.UrlConfiguration
         }
 
 
+        private async Task OnEdit(UrlModelOutDto item)
+        {
+            _message.Info("Edit Success" + item.Id);
+            Console.WriteLine("Edit");
+        }
+
+
+        private async Task OnDelete(UrlModelOutDto item)
+        {
+            if (await _mediator.Send(new RemoveAirportUrl.RemoveAirportUrlCommand(item.Id)))
+            {
+                _model = await _mediator.Send(new GetAirportUrlList.GetAirportUrlListQuery());
+                _message.Info("Delete Success" + item.Id);
+            }
+            else
+            {
+                _message.Error("Delete Error");
+            }
+            
+            Console.WriteLine("delete");
+        }
+
+
+
+
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            var str = File.ReadAllText("./wwwroot/data/fake_list.json");
-            var list = JsonConvert.DeserializeObject<List<ListItemDataType>>(str);
-            //_data = list.ToArray();
-            _data = new List<UrlModelOutDto>()
-            {
-            };
-
+            _model = await _mediator.Send(new GetAirportUrlList.GetAirportUrlListQuery());
         }
+
 
     }
 }

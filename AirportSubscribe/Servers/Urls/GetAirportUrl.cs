@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AirportSubscribe.Servers.Urls
 {
-    public class GetAirportUrl
+    public class GetAirportUrl 
     {
     }
 }
