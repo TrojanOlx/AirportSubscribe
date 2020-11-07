@@ -15,6 +15,7 @@ using AirportSubscribe.Models;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using AutoMapper;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace AirportSubscribe
 {
@@ -50,6 +51,30 @@ namespace AirportSubscribe
             {
                 builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
             }));
+
+
+            //添加认证相关的服务
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddCookie("Cookies")
+            .AddOpenIdConnect("oidc", options =>
+            {
+                options.Authority = "http://oulongxing.com:15000";
+                //Identity Server配置的Client 以及 Secret
+                options.ClientId = "tx.client";
+                options.ClientSecret = "TrojanApi";
+                //认证模式
+                options.ResponseType = "code";
+                //保存token到本地
+                options.SaveTokens = true;
+
+            });
+
 
         }
 
