@@ -6,7 +6,7 @@ using AirportSubscribe.Servers.Urls;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AirportSubscribe.Pages
+namespace AirportSubscribe.Controllers
 {
     [Route("api/Subscribe")]
     public class SubscribeController : Controller
