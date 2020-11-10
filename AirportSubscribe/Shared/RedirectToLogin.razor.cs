@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace AirportSubscribe.Shared
+﻿namespace AirportSubscribe.Shared
 {
-    public partial class RedirectToLogin  : ComponentBase
+    public partial class RedirectToLogin
     {
+        
     }
 }

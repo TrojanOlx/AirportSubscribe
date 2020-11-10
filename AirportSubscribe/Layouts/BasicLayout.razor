@@ -6,9 +6,10 @@
     <AntDesign.Pro.Layout.BasicLayout Logo="@("https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg")"
                                       MenuData="_menuData">
         <RightContentRender>
-            <RightContent />
+            @*<NvaMenu  OnUserItemSelected="item => { Console.WriteLine(item.Key); }" />*@
+            <a href="account/login">Log in</a>
+            <LoginDisplay></LoginDisplay>
         </RightContentRender>
-
         <ChildContent>
             @Body
         </ChildContent>
