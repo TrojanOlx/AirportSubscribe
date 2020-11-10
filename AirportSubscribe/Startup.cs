@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 using AutoMapper;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace AirportSubscribe
 {
@@ -54,6 +55,15 @@ namespace AirportSubscribe
 
 
             //添加认证相关的服务
+            AddAuthentication(services);
+
+
+        }
+
+
+
+        private void AddAuthentication(IServiceCollection services)
+        {
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             services.AddAuthentication(options =>
@@ -61,22 +71,78 @@ namespace AirportSubscribe
                 options.DefaultScheme = "Cookies";
                 options.DefaultChallengeScheme = "oidc";
             })
-            .AddCookie("Cookies")
-            .AddOpenIdConnect("oidc", options =>
+                .AddCookie("Cookies")
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    options.Authority = "https://localhost:5001";
+
+                    options.ClientId = "AirportSubscribe";
+                    options.ClientSecret = "secret";
+                    options.ResponseType = "code";
+
+                    options.SaveTokens = true;
+                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.Scope.Add("role");
+                    options.Scope.Add("permission");
+                    options.TokenValidationParameters.RoleClaimType = "role";
+                    options.TokenValidationParameters.NameClaimType = "name";
+                    options.Events.OnUserInformationReceived = (context) =>
+                    {
+
+                        ClaimsIdentity claimsId = context.Principal.Identity as ClaimsIdentity;
+
+                        var roleElement = context.User.RootElement.GetProperty("role");
+                        if (roleElement.ValueKind == System.Text.Json.JsonValueKind.Array)
+                        {
+                            var roles = context.User.RootElement.GetProperty("role").EnumerateArray().Select(e =>
+                            {
+                                return e.ToString();
+                            });
+                            claimsId.AddClaims(roles.Select(r => new Claim("role", r)));
+                        }
+                        else
+                        {
+                            claimsId.AddClaim(new Claim("role", roleElement.ToString()));
+                        }
+
+                        var permissionElement = context.User.RootElement.GetProperty("permission");
+                        if (permissionElement.ValueKind == System.Text.Json.JsonValueKind.Array)
+                        {
+                            var permissions = permissionElement.EnumerateArray().Select(e =>
+                            {
+                                return e.ToString();
+                            });
+                            claimsId.AddClaims(permissions.Select(p => new Claim("permission", p)));
+                        }
+                        else
+                        {
+                            claimsId.AddClaim(new Claim("permission", permissionElement.ToString()));
+                        }
+
+
+                        return Task.CompletedTask;
+                    };
+                });
+
+            services.AddAuthorizationCore(option =>
             {
-                options.Authority = "http://oulongxing.com:15000";
-                //Identity Server配置的Client 以及 Secret
-                options.ClientId = "tx.client";
-                options.ClientSecret = "TrojanApi";
-                //认证模式
-                options.ResponseType = "code";
-                //保存token到本地
-                options.SaveTokens = true;
-
+                string[] permissions = new string[]
+                {
+                    "create",
+                    "retrieve",
+                    "update",
+                    "delete"
+                };
+                foreach (var p in permissions)
+                {
+                    option.AddPolicy(p, policy =>
+                    {
+                        policy.RequireClaim("permission", new string[] { p });
+                    });
+                }
             });
-
-
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -96,6 +162,10 @@ namespace AirportSubscribe
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
