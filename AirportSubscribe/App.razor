@@ -1,26 +1,12 @@
-@using AirportSubscribe.Shared
 <Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
-        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(BasicLayout)">
-            <NotAuthorized>
-                @if (!context.User.Identity.IsAuthenticated)
-                {
-                    <RedirectToLogin></RedirectToLogin>
-                }
-                else
-                {
-                    <p>
-                        You are not authorized to access
-                        this resource.
-                    </p>
-                }
-            </NotAuthorized>
-        </AuthorizeRouteView>
-        @*<RouteView RouteData="@routeData" DefaultLayout="@typeof(BasicLayout)" />*@
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
     </Found>
     <NotFound>
-        <LayoutView Layout="@typeof(BasicLayout)">
+        <LayoutView Layout="@typeof(MainLayout)">
             <p>Sorry, there's nothing at this address.</p>
         </LayoutView>
     </NotFound>
 </Router>
+
+<AntContainer />

@@ -1,0 +1,212 @@
+﻿@page "/Airport"
+@inject IJSRuntime JSRuntime
+@layout _Layout
+@using AirportSubscribe.Shared.Module
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card card-nav-tabs">
+                <div class="card-header card-header-danger">
+                    Featured
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Ip: 127.0.0.1<span>    </span>Port: 8888</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+                <div class="card-body">
+                    <a href="#0" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-nav-tabs">
+                <div class="card-header card-header-success">
+                    Featured
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+                <div class="card-body">
+                    <a href="#0" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-nav-tabs">
+                <div class="card-header card-header-warning">
+                    Featured
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+                <div class="card-body">
+                    <a href="#0" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card card-chart">
+                <div class="card-header card-header-primary" data-header-animation="true">
+                    <div class="ct-chart" id="dailySalesChart"></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-actions">
+                        <button type="button" class="btn btn-danger btn-link fix-broken-card">
+                            <i class="material-icons">build</i> Fix Header!
+                        </button>
+
+                        <button type="button" class="btn btn-info btn-link" rel="tooltip" data-placement="bottom" title="Refresh">
+                            <i class="material-icons">refresh</i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-link" rel="tooltip" data-placement="bottom" title="Change Date">
+                            <i class="material-icons">edit</i>
+                        </button>
+                    </div>
+                    <h4 class="card-title">Daily Sales</h4>
+                    <p class="card-category">
+                        <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <i class="material-icons">access_time</i> updated 4 minutes ago
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <CardView CardActions="@_cardActions" DataModel="@_dataModel" CardChartData="@_cardChart"></CardView>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-chart">
+                <div class="card-header card-header-danger">
+                    <div class="ct-chart" id="completedTasksChart"></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-actions">
+                        <button type="button" class="btn btn-danger btn-link fix-broken-card">
+                            <i class="material-icons">build</i> Fix Header!
+                        </button>
+
+                        <button type="button" class="btn btn-info btn-link" rel="tooltip" data-placement="bottom" title="Refresh">
+                            <i class="material-icons">refresh</i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-link" rel="tooltip" data-placement="bottom" title="Change Date">
+                            <i class="material-icons">edit</i>
+                        </button>
+                    </div>
+                    <h4 class="card-title">Daily Sales</h4>
+                    <p class="card-category">
+                        <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <i class="material-icons">access_time</i> updated 4 minutes ago
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card card-nav-tabs">
+                <div class="card-header card-header-danger">
+                    Featured
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+                <div class="card-body">
+                    <a href="#0" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-nav-tabs">
+                <div class="card-header card-header-danger">
+                    Featured
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+                <div class="card-body">
+                    <a href="#0" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-nav-tabs">
+                <div class="card-header card-header-danger">
+                    Featured
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+                <div class="card-body">
+                    <a href="#0" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code
+{
+    string id = "id";
+    List<string> labels = new List<string>() { "M", "T", "W", "T", "F", "S", "S" };
+    List<List<decimal>> series = new List<List<decimal>>() { new List<decimal>() { 12, 17, 7, 17, 23, 18, 38 } };
+
+    List<CardView.CardAction> _cardActions = new List<CardView.CardAction>()
+    {
+        new CardView.CardAction()
+        {
+            ButtonClass = "btn btn-info btn-link",
+            Title = "Title",
+            Icon = "material-icons",
+            IconContext = "refresh",
+            Action = () =>
+            {
+                Console.WriteLine("OnValueChanged");
+            }
+        }
+    };
+
+    CardView.CardDataModel _dataModel = new CardView.CardDataModel()
+    {
+        Id = "Id1",
+        Name = "Name",
+        Content = "Content",
+        LastUpdateDateTime = "LastUpdateDateTime"
+    };
+
+    CardView.CardChart _cardChart = new CardView.CardChart()
+    {
+        Labels = new List<string>() { "M", "T", "W", "T", "F", "S", "S" },
+        Series = new List<List<decimal>>() { new List<decimal>() { 12, 17, 7, 17, 23, 18, 38 } }
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("init");
+    }
+
+}
+
+
+

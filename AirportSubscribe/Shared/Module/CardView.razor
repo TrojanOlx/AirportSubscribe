@@ -1,0 +1,76 @@
+﻿@using System.Net.Http.Json
+@using Newtonsoft.Json
+@inject IJSRuntime JSRuntime
+<div class="card card-chart">
+    <div class="card-header card-header-warning" data-header-animation="true">
+        <div class="ct-chart" id="Chart_@DataModel.Id"></div>
+    </div>
+    <div class="card-body">
+        <div class="card-actions">
+            @foreach (var item in @CardActions)
+            {
+                <button type="button" class="@item.ButtonClass" rel="tooltip" data-placement="bottom" title="@item.Title" onclick="@item.Action">
+                    <i class="@item.Icon">@item.IconContext</i>
+                </Button>
+            }
+        </div>
+        <h4 class="card-title">@DataModel.Name</h4>
+        <p class="card-category">
+            <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> @DataModel.Content
+        </p>
+    </div>
+    <div class="card-footer">
+        <div class="stats">
+            <i class="material-icons">access_time</i> @DataModel.LastUpdateDateTime
+        </div>
+    </div>
+</div>
+
+@code
+{
+    public class CardAction
+    {
+        public string ButtonClass { get; set; }
+        public string Title { get; set; }
+        public string Icon { get; set; }
+        public string IconContext { get; set; }
+        public Action Action { get; set; }
+    }
+
+    public class CardChart
+    {
+        public List<string> Labels { get; set; }
+        public List<List<decimal>> Series { get; set; }
+    }
+
+    public class CardDataModel
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Content { get; set; }
+        public string LastUpdateDateTime { get; set; }
+    }
+
+
+
+    [Parameter]
+    public List<CardAction> CardActions { get; set; }
+
+    [Parameter]
+    public CardDataModel DataModel { get; set; }
+
+    [Parameter]
+    public CardChart CardChartData { get; set; }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("initCard", @$"Chart_{@DataModel.Id}", CardChartData.Labels, CardChartData.Series);
+    }
+
+    private void OnValueChanged()
+    {
+        Console.WriteLine("");
+    }
+
+}
